@@ -1,22 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import firestore from '@react-native-firebase/firestore';
-// firebase-course-predotech is the project in firebase
+
 
 const Home = () => {
     
-    const getData = ()=>{
-      firestore()
-  .collection('Users')
-  .add({
-    name: 'Ada ',
-    age: 30,
-  })
-  .then(() => {
-    console.log('User added!');
-  });
-    }
-    
+
     return (
     <View>
 

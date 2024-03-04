@@ -3,9 +3,9 @@ import React from 'react'
 import { moderateScale, moderateVerticalScale, scale, verticalScale } from 'react-native-size-matters'
 import { BG_COLOR } from '../utils/Colors'
 
-const CustomTextInput = ({title,placeholder,value,onChangeText}) => {
+const CustomTextInput = ({title,placeholder,value,onChangeText,bad}) => {
   return (
-    <View style={styles.input}>
+    <View style={[styles.input,{borderColor:bad?'red':null}]}>
         <Text  style={styles.title}>{title}</Text>
   <TextInput value={value} onChangeText={(txt)=>onChangeText(txt)} style={styles.TextInput} placeholder={placeholder}/>
     </View>
@@ -16,8 +16,9 @@ export default CustomTextInput
 
 const styles = StyleSheet.create({
     input:{width:'90%'
-    ,height:verticalScale(45)
-,borderWidth:1,marginTop:verticalScale(20),borderRadius:moderateScale(10),
+    ,height:verticalScale(42)
+,borderWidth:1,marginTop:verticalScale(20),
+borderRadius:moderateScale(10),
 },
 
 title:{
