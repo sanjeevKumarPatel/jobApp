@@ -11,7 +11,7 @@ const navigation = useNavigation()
 useEffect(()=>{
 setTimeout(()=>{
 navigation.navigate('SelectUser')
-},1000)
+},500)
 
 },[])
 

@@ -6,7 +6,7 @@ import { BG_COLOR } from '../utils/Colors'
 const CustomTextInput = ({title,placeholder,value,onChangeText,bad}) => {
   return (
     <View style={[styles.input,{borderColor:bad?'red':null}]}>
-        <Text  style={styles.title}>{title}</Text>
+        <Text  style={[styles.title,{color:bad?'red':null}]}>{title}</Text>
   <TextInput value={value} onChangeText={(txt)=>onChangeText(txt)} style={styles.TextInput} placeholder={placeholder}/>
     </View>
   )

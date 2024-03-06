@@ -21,9 +21,10 @@ import firestore from '@react-native-firebase/firestore';
 
 const SignUpForCompany = () => {
 
-const [loading,setLoading] = useState(false)
-
   const navigation = useNavigation();
+
+  const [accountCreated,setAccountCreated ] = useState(false)
+  const [loading,setLoading] = useState(false)
 
 const [name,setName] = useState('')
 const [badname,setBadname] = useState('')
@@ -59,8 +60,20 @@ address,
 password
 })
 .then(() => {
+  setAccountCreated(true)
   console.log('User added!');
   setLoading(false);
+  setTimeout(() => {
+    navigation.goBack()
+  }, 3000);
+
+  setName('');
+  setEmail('');
+  setPassword('')
+  setCompanyName('')
+  setAddress('')
+  setPhone('')
+
 }).catch((error)=>{
   setLoading(false);
   console.log(error)
@@ -77,31 +90,42 @@ password
 const validate =()=>{
   let validName = true;
    let validEmail = true;
-   let validContact = true;
+   let validPhone = true;
    let validCompany = true;
    let validPass = true;
    let validAddress = true;
 
-   if(name ==''){
-    validName = false;
-    setBadname('Please Enter Name')
-   }else if (name!== '' && name.length < 3){
+    if (name== ''){
     validName = false;
     setBadname('Please Enter Valid name')
    }
-   else if (name!== '' && name.length > 3){
+
+   else if( name !== "" &&  name.length < 3 ){
+validName =false;
+setBadname("Please enter valid name")
+
+   }
+else if(  name !== "" &&  name.length > 3 && !name.toString().match(/^[a-z ,.'-]+$/i))
+{
+  validName = false;
+  setBadname("Please remove numbers from the name")
+}
+   else if (name!== '' && name.length >=3 && name.toString().match(/^[a-z ,.'-]+$/i)){
     validName = true;
     setBadname('')
    }
 
-   if(email ==''){
+
+   if(email =='') { 
     validEmail = false;
     setBadEmail('Please Enter Email')
-   }else if (email!== '' && email.length < 3){
+   }else if (email!= '' &&  !email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i)){
     validEmail = false;
     setBadEmail('Please Enter Valid Email')
    }
-   else if (email!== '' && email.length > 3){
+
+  
+   else if (email!= '' && email.toString().match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)){
     validEmail = true;
     setBadEmail('')
    }
@@ -109,14 +133,14 @@ const validate =()=>{
 
    
    if(phone ==''){
-    validContact = false;
+    validPhone = false;
     setBadPhone('Please Enter contact number')
-   }else if (phone!== '' && phone.length < 3){
-    validContact = false;
+   }else if (phone!== '' && phone.length < 10 && !phone.match(/^(\+\d{1,3}[- ]?)?\d{10}$/)){
+    validPhone = false;
     setBadPhone('Please Enter Valid phone')
    }
-   else if (phone!== '' && phone.length > 3){
-    validContact = true;
+   else if (phone!== '' && phone.length >= 10 && phone.match(/^(\+\d{1,3}[- ]?)?\d{10}$/) ){
+    validPhone = true;
     setBadPhone('')
    }
 
@@ -129,7 +153,7 @@ const validate =()=>{
     setBadCompanyName('Please Enter Valid phone')
    }
    else if (companyName!== '' && companyName.length > 3){
-    validContact = true;
+    validCompany = true;
     setBadCompanyName('')
    }
 
@@ -150,19 +174,24 @@ const validate =()=>{
    if(password ==''){
     validPass = false;
     setBadPassword('Please Enter valid paassword')
-   }else if (password!== '' && password.length < 3){
+   }else if (password!== '' && password.length < 6){
     validPass = false;
     setBadPassword('Please Enter Valid paassword')
    }
-   else if (password!== '' && password.length > 3){
+   else {
     validPass = true;
     setBadPassword('')
    }
+
+   return validAddress && validPass && validCompany && validName && validPhone && validEmail
 }
 
 
 
   return (
+<>
+
+  { !accountCreated ?
     <ScrollView>
     <View style={{flex:1,backgroundColor:BG_COLOR,alignItems:'center',marginBottom:moderateVerticalScale(10)}}>
 
@@ -206,8 +235,9 @@ const validate =()=>{
 
 <CustomSoliButton title={"SignUp"} onClick={()=>{
 
-  Alert.alert('ready to send data',"Gettin ready")
   if(validate()){
+    // Alert.alert('ready to send data',"Gettin ready")
+    registerUser();
   }
  
 }}/>
@@ -215,7 +245,13 @@ const validate =()=>{
 <CustomBorderButton  title={"LogIn"} onClick={()=>navigation.goBack()}/>
     </View>
     <Loader loading={loading}/>
-    </ScrollView>  )
+    </ScrollView> : 
+    <View style={{justifyContent:'center',alignItems:'center',flex:1,padding:moderateScale(24)}}>
+      <Image source={require('../../images/check.png')} style={{height:moderateVerticalScale(100),width:moderateScale(100)}}/>
+    <Text style={{color:'blue',fontSize:26 ,fontWeight:'600'}}>You have created your accouont successfully.</Text>
+    </View>}
+    
+    </> )
 }
 
 export default SignUpForCompany
