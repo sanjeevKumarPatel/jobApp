@@ -6,6 +6,13 @@ import CustomTextInput from '../../common/CustomTextInput'
 import CustomSoliButton from '../../common/CustomSoliButton'
 import CustomBorderButton from '../../common/CustomBorderButton'
 import { useNavigation } from '@react-navigation/native'
+import firestore from '@react-native-firebase/firestore';
+import Loader from '../../common/Loader'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+// firebase-course-predotech is the project in firebase
+
+
+
 
 const LoginForCompany = () => {
   const navigation = useNavigation();
@@ -15,12 +22,45 @@ const [badEmail,setBadEmail] = useState('')
 
   const [password,setPassword] = useState('')
   const [badPassword,setBadPassword] = useState('')
-  
+  const [loading,setLoading] = useState(false)
 
 
+//////////////////
+const loginUser =()=>{
+setLoading(true)
+firestore().collection('Job_Posters').where('email','==',email).get().then(data=>{
+  setLoading(false)
+  console.log(data.docs)
+if(data.docs.length > 0){
+data.docs.forEach(item=>{
+  if(item.data().password == password){
+    setBadEmail('')
+    setBadPassword('')
+    goToNextScreen(item.id,item.data().email,item.data().name,item.data().companyName)
+      }else{
+        setBadPassword('Wrong Password')
+      }
+})
 
+  }
+  else{
+    setBadEmail('No user Exists with this Email')
+  }
+
+}).catch(err=>{
+  setLoading(false)
+  console.log(err)})
+}
 /////////////////////////////
+const goToNextScreen= async(id,email,name)=>{
+await AsyncStorage.setItem("NAME",name)
+await AsyncStorage.setItem("EMAIL",email)
+await AsyncStorage.setItem("USER_ID",id)
+await AsyncStorage.setItem("USER_TYPE", "company")
 
+navigation.navigate("DashboardForCompany")
+
+}
 
 
 const validate =()=>{
@@ -88,11 +128,12 @@ const validate =()=>{
 
 <CustomSoliButton title={"LogIn"} onClick={()=>{
   if(validate()){
-    
+    loginUser();
   }
 }
 }/>
-<CustomBorderButton  title={"Create Account"} onClick={()=>navigation.navigate('SignUpForCompany')}/>
+<CustomBorderButton title={"Create Account"} onClick={()=>navigation.navigate('SignUpForCompany')}/>
+<Loader loading={loading}/>
     </View>
   )
 }

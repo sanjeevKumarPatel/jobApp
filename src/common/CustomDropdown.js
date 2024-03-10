@@ -3,16 +3,18 @@ import React from 'react'
 import { moderateScale, moderateVerticalScale, scale, verticalScale } from 'react-native-size-matters'
 import { BG_COLOR } from '../utils/Colors'
 
-const CustomTextInput = ({title,placeholder,value,onChangeText,bad,keyboardType}) => {
+const CustomDropdown = ({title,placeholder,value,onChangeText,bad,keyboardType}) => {
   return (
     <View style={[styles.input,{borderColor:bad?'red':null}]}>
         <Text  style={[styles.title,{color:bad?'red':null}]}>{title}</Text>
-  <TextInput keyboardType={keyboardType?keyboardType:'default'} value={value} onChangeText={(txt)=>onChangeText(txt)} style={styles.TextInput} placeholder={placeholder}/>
+  
+  
+  
     </View>
   )
 }
 
-export default CustomTextInput
+export default CustomDropdown
 
 const styles = StyleSheet.create({
     input:{width:'90%'
