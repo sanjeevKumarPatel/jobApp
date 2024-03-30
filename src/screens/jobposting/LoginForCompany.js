@@ -26,11 +26,12 @@ const [badEmail,setBadEmail] = useState('')
 
 
 //////////////////
-const loginUser =()=>{
+const loginUser =()=>{;
 setLoading(true)
 firestore().collection('Job_Posters').where('email','==',email).get().then(data=>{
   setLoading(false)
-  console.log(data.docs)
+
+
 if(data.docs.length > 0){
 data.docs.forEach(item=>{
   if(item.data().password == password){

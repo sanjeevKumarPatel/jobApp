@@ -10,7 +10,7 @@ import { profile } from '../../../utils/Profiles';
 
 const AddJob = () => {
   const navigation = useNavigation();
-
+let temp;
   const [jobTitle, setJobTitle] = useState('')
   const [badJobTitle, setBadJobTitle] = useState('')
 
@@ -31,8 +31,8 @@ const AddJob = () => {
   const [selectedCategory, setSelectedCategory] = useState('Select Category')
 
 
-  const [skills, setSkills] = useState("Select Skill")
-  const [badSkills, setBadSkills] = useState('')
+  const [selectedSkill, setSelectedSkill] = useState([])
+  const [badSkill, setBadSkill] = useState('')
 
   const [modalVisible, setModalVisible] = useState(false)
   const [skillModalVisible, setSkillModalVisible] = useState(false)
@@ -92,17 +92,18 @@ const AddJob = () => {
 
 
       <CustomDropdown title={' Select Category'} placeholder={selectedCategory == "Select Category" ? "Select Category"  : profile[selectedCategory]?.category}
-       bad={badSkills !== '' ? true : false} onClick={() => setModalVisible(true)}
+       bad={badSkill !== '' ? true : false} onClick={() => setModalVisible(true)}
+       
       />
-      {badSkills !== "" && <Text style={styles.errorMessage}>{badSkills}</Text>}
+      {badSkill !== "" && <Text style={styles.errorMessage}>{badSkill}</Text>}
 
 
-      <CustomDropdown title={'Select Skill'} placeholder={skills}
+      <CustomDropdown title={'Select Skill'} placeholder={selectedCategory == "Select Category" ? "Select Skill" : profile[selectedCategory]?.keywords[selectedSkill]   }
 
-        bad={badSkills !== '' ? true : false} onClick={() => setSkillModalVisible(true) }
+
+        bad={badSkill !== '' ? true : false} onClick={() => setSkillModalVisible(true) }
       />
-      {/* {badSkills !== "" && <Text style={styles.errorMessage}>{badSkills}</Text>} */}
-
+      {/* {badSkill !== "" && <Text style={styles.errorMessage}>{badSkill}</Text>} */}
 
       <CustomSoliButton title={"Add Job"} onClick={() => console.log("clicked")} />
 
@@ -123,15 +124,13 @@ const AddJob = () => {
                   onPress={() => {
                     setSelectedCategory(index);
                     setModalVisible(false)
-                  }} key={() => index} >
+                  }} key={() => index}>
                   <Text style={{ fontSize: scale(14), fontWeight: '500', borderBottomWidth: 1, paddingVertical: scale(16) }}>{item?.category}
-                  </Text></TouchableOpacity>)
+                  </Text>
+      </TouchableOpacity>)
             }
-
             } />
-
           </View>
-
         </View>
 
 
@@ -139,7 +138,7 @@ const AddJob = () => {
 
       {/* ===================================== Modal for skill ====== */}
 
-      <Modal transparent visible={skillModalVisible}>
+      <Modal transparent visible={skillModalVisible}> 
 
 <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', alignItems: 'center' }}>
   <View style={{ width: '90%', backgroundColor: BG_COLOR, height: '80%', borderRadius: moderateScale(10) }}>
@@ -147,23 +146,27 @@ const AddJob = () => {
       color: TEXT_COLOR, fontSize: scale
         (24), fontWeight: '600', textDecorationColor: 'red', padding: scale(4)
     }}>Choose Skill</Text>
-    <FlatList data={profile[selectedCategory].key == "Selected Category" ? profile[0]: profile[selectedCategory]} renderItem={({ item, index }) => {
+
+ <FlatList 
+ data={selectedCategory == "Select Category" ? profile[0].keywords: profile[selectedCategory].keywords} 
+ 
+ renderItem={({ item, index }) => {
       return (
 
         <TouchableOpacity style={{ paddingHorizontal: scale(12) }}
           onPress={() => {
-            setSelectedSkill(item);
+          // temp = item[0] + item.at(1)== null ? " " : item.at(1)
+            setSelectedSkill(index);
             setSkillModalVisible(false)
           }} key={() => index} >
-
           <Text 
           style={{ fontSize: scale(14), fontWeight: '500', borderBottomWidth: 1, paddingVertical: scale(16) }}>
-            {item?.keywords}
+            {`${item[0]} ${item.at(1)== null ? " ": item.at(1)}`}
           </Text>
           </TouchableOpacity>)
     }
 
-    } />
+    } /> 
 
   </View>
 
@@ -174,7 +177,6 @@ const AddJob = () => {
 
 
 {/* ///////////////////////////////////////////////// */}
-
     </View>
   )
 }

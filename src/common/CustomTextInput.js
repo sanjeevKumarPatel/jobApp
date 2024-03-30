@@ -29,5 +29,7 @@ title:{
 },
 TextInput:{
     marginLeft:moderateScale(10),
+
+
 }
 })
