@@ -12,7 +12,7 @@ const CustomTextInput = ({title,placeholder,value,bad,onClick}) => {
 
 <TouchableOpacity style={{flexDirection:'row',justifyContent:'space-between',marginHorizontal:scale(12),paddingVertical:scale(2)}} onPress={onClick}>
 
-  <Text style={{color:placeholder?.includes('Select ')?'#9e9e9e' :'black'}} > {placeholder} </Text>
+  <Text style={{color:placeholder?.includes('Select')?'#9e9e9e' :'black'}} > {placeholder} </Text>
   <Image source={require('../images/down.png') } style={{height:scale(20),width:scale(20)
 }}/>
 </TouchableOpacity>

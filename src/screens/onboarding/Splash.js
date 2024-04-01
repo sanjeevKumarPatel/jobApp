@@ -11,7 +11,7 @@ const Splash = () => {
 const navigation = useNavigation()
 useEffect(()=>{
 setTimeout(()=>{
-// navigation.navigate('SelectUser')
+navigation.navigate('SelectUser')
 getData()
 },1000)
 
